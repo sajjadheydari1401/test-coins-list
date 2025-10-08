@@ -39,6 +39,14 @@ Notes:
 
 - The project uses the Next.js App Router. Server and client components are used; the Redux provider is provided via a small client wrapper to avoid server/client export issues.
 
+## TEST
+
+To run unit tests, run below command in root:
+
+```bash
+npm run test
+```
+
 ## Build / Start (production)
 
 ```bash
@@ -49,6 +57,7 @@ npm start
 ## Project structure and important files
 
 - `app/`
+  - `__tests__` — unit tests for UI components.
   - `api/coins/route.ts` — server API route that proxies to CoinMarketCap; normalizes response shape.
   - `components/` — React components: `CoinCard`, `CoinsList`, `SkeletonCard`, `ShowMoreButton`.
   - `providers/ReduxProvider.tsx` — client-only wrapper for `react-redux` Provider.
