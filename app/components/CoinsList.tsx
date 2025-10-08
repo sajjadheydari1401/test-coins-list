@@ -13,10 +13,11 @@ import { REFETCH_INTERVAL } from "../lib/config";
 
 export default function CoinsList() {
   const dispatch = useDispatch<AppDispatch>();
-  const { items, status, page, per_page } = useSelector(
+  const { items, status, per_page, page } = useSelector(
     (s: RootState) => s.coins
   );
   const [loadedPages, setLoadedPages] = useState(1);
+  const [showMoreLoading, setShowMoreLoading] = useState(false);
 
   useEffect(() => {
     // Load cached first, then background fetch
@@ -47,6 +48,7 @@ export default function CoinsList() {
   }, [dispatch, per_page]);
 
   const handleShowMore = () => {
+    setShowMoreLoading(true);
     if (loadedPages === 1) {
       api
         .get("/coins", { params: { page: 1, per_page: 50 } })
@@ -56,7 +58,9 @@ export default function CoinsList() {
           await savePage(`coins:1:50`, data);
           dispatch({ type: "coins/appendCoins", payload: toAppend });
           setLoadedPages(2);
-        });
+        })
+        .catch(() => {})
+        .finally(() => setShowMoreLoading(false));
     } else {
       dispatch(
         fetchPage({
@@ -64,11 +68,14 @@ export default function CoinsList() {
           per_page: 50,
           forceNetwork: false,
         } as any)
-      ).then((res: any) => {
-        if (res && res.payload && res.payload.data) {
-          setLoadedPages(loadedPages + 1);
-        }
-      });
+      )
+        .then((res: any) => {
+          if (res && res.payload && res.payload.data) {
+            setLoadedPages(loadedPages + 1);
+          }
+        })
+        .catch(() => {})
+        .finally(() => setShowMoreLoading(false));
     }
   };
 
@@ -78,12 +85,13 @@ export default function CoinsList() {
         ? Array.from({ length: per_page }).map((_, i) => (
             <SkeletonCard key={i} />
           ))
-        : items.map((c: any) => <CoinCard key={c.id} coin={c} />)}
+        : items.map((c: any) => <CoinCard key={c.symbol} coin={c} />)}
 
       <div className="flex justify-center mt-4">
         <ShowMoreButton
           onClick={handleShowMore}
           disabled={status === "loading"}
+          loading={showMoreLoading}
         />
       </div>
     </div>
