@@ -5,7 +5,7 @@ export const NODE_ENV = process.env.NODE_ENV || "development";
 export const API_BASE_URL = "/api";
 export const VS_CURRENCY = "usd";
 export const DEFAULT_PER_PAGE = 10;
-export const REFETCH_INTERVAL= 60_000;
+export const REFETCH_INTERVAL= 10_000;
 
 export function coinMarketCapUrl(start: number, per_page: number) {
   return `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=${start}&limit=${per_page}&convert=${VS_CURRENCY.toUpperCase()}`;

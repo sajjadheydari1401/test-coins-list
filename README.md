@@ -5,7 +5,7 @@ Small Next.js app that displays a list of cryptocurrencies with cache-first beha
 ## Features
 
 - Initial list: top 10 cryptocurrencies (rank order), loaded from IndexedDB if present (cache-first).
-- Periodic refresh: background polling (60s) updates page 1 from the network.
+- Periodic refresh: background polling (10s) updates page 1 from the network.
 - Pagination: clicking "Show More" appends 50-item batches: first click adds ranks 11–50, next adds 51–100, etc.
 - IndexedDB caching: pages are stored in IndexedDB to support fast initial loads and offline behavior.
 - Server-side proxy: `app/api/coins/route.ts` proxies requests to CoinMarketCap.
@@ -69,7 +69,7 @@ Other noteworthy files:
 - Cache-first design (IndexedDB)
 
   - We store whole pages in IndexedDB keyed by `coins:{page}:{per_page}` so initial loads are immediate and the app works in flaky/offline conditions.
-  - The app polls the network in the background (60s) to refresh page 1 and updates the cache.
+  - The app polls the network in the background (10s) to refresh page 1 and updates the cache.
 
 - Redux Toolkit
 
